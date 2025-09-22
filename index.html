@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Your Eyes Only 💌</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Quicksand:wght@300;400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e6 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Password Screen Styles */
+        #passwordScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .password-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(216, 167, 177, 0.3);
+            width: 100%;
+        }
+
+        .lock-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .password-input {
+            padding: 15px 20px;
+            border: 2px solid #d8a7b1;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            margin: 20px 0;
+            width: 100%;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .password-input:focus {
+            border-color: #b86b84;
+            box-shadow: 0 0 15px rgba(184, 107, 132, 0.3);
+        }
+
+        .unlock-btn {
+            background: linear-gradient(135deg, #d8a7b1 0%, #b86b84 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 500;
+            box-shadow: 0 3px 12px rgba(184, 107, 132, 0.25);
+        }
+
+        .unlock-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(184, 107, 132, 0.35);
+        }
+
+        .hint {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 15px;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+            display: none;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content Styles (Your Original Code) */
+        #mainContent {
+            display: none;
+            width: 100%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+            padding: 25px 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(216, 167, 177, 0.3);
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+
+        #screen1 {
+            display: block;
+        }
+
+        h1 {
+            font-family: 'Crimson Text', serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: #7e4b5c;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #555;
+        }
+
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        button {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(135deg, #d8a7b1 0%, #b86b84 100%);
+            color: white;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 3px 12px rgba(184, 107, 132, 0.25);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 18px rgba(184, 107, 132, 0.35);
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #b86b84;
+            border: 1px solid #d8a7b1;
+            box-shadow: none;
+            margin-top: 10px;
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
+
+        .back-btn:hover {
+            background: #f9f0f2;
+        }
+
+        .heart {
+            color: #e76d89;
+            animation: pulse 2s infinite;
+        }
+
+        .final-message {
+            background: #fef6f8;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 4px solid #d8a7b1;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .memory {
+            font-style: italic;
+            color: #7e4b5c;
+            margin: 15px 0;
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(216, 167, 177, 0.08);
+            border-left: 3px solid #d8a7b1;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .typing-dots {
+            display: inline-block;
+            animation: typing 1.5s infinite;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes typing {
+            0%, 20% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-heart {
+            position: absolute;
+            font-size: 1.2rem;
+            opacity: 0;
+            animation: floatUp 8s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { 
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg); 
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% { 
+                opacity: 0;
+                transform: translateY(-100px) rotate(360deg); 
+            }
+        }
+
+        .message-bubble {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 18px;
+            margin: 10px 0;
+            border: 1px solid #e9ecef;
+            text-align: left;
+            position: relative;
+        }
+
+        .message-bubble::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 15px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #f8f9fa;
+        }
+
+        /* Mobile-specific adjustments */
+        @media (max-width: 480px) {
+            .container, .password-container {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+            
+            h1 {
+                font-size: 1.9rem;
+            }
+            
+            p {
+                font-size: 1.05rem;
+            }
+            
+            button, .unlock-btn {
+                padding: 13px 18px;
+            }
+            
+            .memory {
+                font-size: 0.95rem;
+                padding: 10px;
+            }
+            
+            .password-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Password Screen -->
+    <div id="passwordScreen">
+        <div class="password-container">
+            <div class="lock-icon">🔒</div>
+            <h1>A Special Message Awaits</h1>
+            <p>This message is meant for your eyes only</p>
+            
+            <input type="password" class="password-input" placeholder="Enter our special word" id="passwordInput">
+            <button class="unlock-btn" onclick="checkPassword()">Unlock Message</button>
+            
+            <div class="hint">Hint: Think of something meaningful between us</div>
+            <div class="error-message" id="errorMessage">Incorrect. Try again with your heart.</div>
+        </div>
+    </div>
+
+    <!-- Main Content (Your Apology) -->
+    <div id="mainContent">
+        <div class="container">
+            <div class="floating-hearts" id="heartsContainer"></div>
+            
+            <!-- Screen 1 -->
+            <div class="screen" id="screen1">
+                <h1>For My Best Friend <span class="heart">💌</span></h1>
+                <p>It's been a lot days without your messages, and every silent moment has screamed your absence.</p>
+                <p>If you're reading this... thank you for opening my Letter one more time.</p>
+                <div class="memory">
+                    "You always knew what I needed to hear, even before I typed it out..."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(2)">I'm reading</button>
+                </div>
+            </div>
+
+            <!-- Screen 2 -->
+            <div class="screen" id="screen2">
+                <p>That day I told you to leave... I've re-read those messages a lot of times.</p>
+                <p>Every word I wrote wrong, every feeling I dismissed — I see it all now.</p>
+                <div class="memory">
+                    "Remember how we could have entire conversations where we just *knew* we understand eachother through text?"
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(3)">Why did you push me away?</button>
+                    <button onclick="showScreen(4)">Your words really hurt me</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 3 -->
+            <div class="screen" id="screen3">
+                <p>Because I was scared. Scared of how much your words mattered to me.</p>
+                <p>When you're thousands of miles apart, words are everything — and I weaponized mine.</p>
+                <div class="message-bubble">
+                    "I'm sorry" doesn't feel big enough for the space I created between us.
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(5)">You know how much words mean to me</button>
+                    <button onclick="showScreen(6)">I trusted your words</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 4 -->
+            <div class="screen" id="screen4">
+                <p>And you had every right to be hurt. Your sensitivity is what makes our connection special.</p>
+                <p>You feel things deeply — that's your strength, not a weakness to be exploited.</p>
+                <div class="memory">
+                    "I miss the way you'd send a message exactly when I needed it — like you could feel my mood through the screen."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(5)">Then why use words to hurt?</button>
+                    <button onclick="showScreen(6)">I miss our conversations</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 5 -->
+            <div class="screen" id="screen5">
+                <p>Because I forgot that our friendship lived in the spaces between words.</p>
+                <p>The understanding that needed no explanation, the comfort that needed no voice.</p>
+                <div class="memory">
+                    "Our bond was built on silent understanding, and I broke that silence with noise."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(7)">I miss that understanding</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 6 -->
+            <div class="screen" id="screen6">
+                <p>I miss our conversations too. The way we could talk about everything and nothing.</p>
+                <p>How a simple "good morning" from you could change my entire day.</p>
+                <div class="message-bubble">
+                    "I'd give anything to see those three dots appear again, knowing you're typing..."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(7)">What happens now?</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 7 - Core Apology -->
+            <div class="screen" id="screen7">
+                <div class="final-message">
+                    <p><strong>I am deeply, truly sorry.</strong></p>
+                    <p>Not just for the words I said, but for the silence I created.</p>
+                    <p>For every message you didn't send because I made you feel unwelcome.</p>
+                </div>
+                <div class="memory">
+                    "You once said we had a 'soul connection beyond words' — and I damaged that with careless ones."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(8)">I want to believe you</button>
+                    <button onclick="showScreen(9)">I need time to heal</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 8 -->
+            <div class="screen" id="screen8">
+                <h1>Thank you for believing <span class="heart">🌟</span></h1>
+                <p>I promise to be more careful with your heart than I am with my own.</p>
+                <p>Our friendship is worth rebuilding, word by careful word.</p>
+                <div class="final-message">
+                    <p><strong>I'll spend every day earning back the trust I so carelessly broke.</strong></p>
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(10)">Let's start healing together</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 9 -->
+            <div class="screen" id="screen9">
+                <h1>I understand <span class="heart">🌙</span></h1>
+                <p>Take all the time you need. Healing can't be rushed.</p>
+                <p>I'll be here, learning to be the friend you deserve.</p>
+                <div class="memory">
+                    "I'll be waiting patiently, remembering why your 'good morning' texts meant everything."
+                </div>
+                <div class="choices">
+                    <button onclick="showScreen(10)">Thank you for understanding</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+
+            <!-- Screen 10 - Final -->
+            <div class="screen" id="screen10">
+                <h1>Our Story Continues <span class="heart">💫</span></h1>
+                <p>This isn't an ending — it's a new chapter.</p>
+                <p>One where I choose my words like precious gifts, because that's what your friendship is.</p>
+                <div class="final-message">
+                    <p><strong>Thank you for giving us another chance.</strong></p>
+                </div>
+                <div class="memory">
+                    "Because some connections are too beautiful to lose over misunderstood words."
+                </div>
+                <div class="choices">
+                    <button onclick="createMagic()">Our friendship means everything 🌸</button>
+                    <button class="back-btn" onclick="goBack()">← Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password Protection Functionality
+        function checkPassword() {
+            // SET YOUR PASSWORD HERE - Change this to something meaningful between you two
+            const correctPasswords = ["princesswithcat"]; // Add your actual passwords
+            
+            const enteredPassword = document.getElementById('passwordInput').value.toLowerCase().trim();
+            
+            if (correctPasswords.includes(enteredPassword)) {
+                // Password correct - show main content
+                document.getElementById('passwordScreen').style.display = 'none';
+                document.getElementById('mainContent').style.display = 'block';
+                
+                // Initialize the apology content
+                initializeApology();
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+            }
+        }
+
+        // Enter key support for password
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Your Original Apology Code Functions
+        let screenHistory = [1];
+        let heartsCreated = false;
+
+        function initializeApology() {
+            // Initialize your apology content
+            showScreen(1);
+            createFloatingHearts();
+        }
+
+        function showScreen(screenNumber) {
+            if (screenHistory[screenHistory.length - 1] !== screenNumber) {
+                screenHistory.push(screenNumber);
+            }
+            
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.style.display = 'none';
+            });
+            
+            const targetScreen = document.getElementById('screen' + screenNumber);
+            if (targetScreen) {
+                targetScreen.style.display = 'block';
+            }
+            
+            if ([7, 8, 9, 10].includes(screenNumber) && !heartsCreated) {
+                createFloatingHearts();
+                heartsCreated = true;
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack() {
+            if (screenHistory.length > 1) {
+                screenHistory.pop();
+                const previousScreen = screenHistory[screenHistory.length - 1];
+                showScreen(previousScreen);
+            }
+        }
+
+        function createFloatingHearts() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            if (!heartsContainer) return;
+            
+            const hearts = ['💖', '💌', '🌟', '💫', '🌸', '🌷', '💕', '✨'];
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.classList.add('floating-heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 6 + 's';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heartsContainer.appendChild(heart);
+            }
+        }
+
+        function createMagic() {
+            const heartsContainer = document.getElementById('heartsContainer');
+            const hearts = ['💖', '💌', '🌟', '💫', '🌸', '🌷', '💕', '✨', '🌼', '💞'];
+            
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement('div');
+                heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.classList.add('floating-heart');
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 3 + 's';
+                heart.style.fontSize = (Math.random() * 25 + 20) + 'px';
+                heart.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                heartsContainer.appendChild(heart);
+            }
+            
+            const button = event.target;
+            button.innerHTML = 'Always your friend 💝';
+            button.style.background = 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)';
+            button.onclick = null;
+            
+            const typingMessage = document.createElement('div');
+            typingMessage.innerHTML = `
+                <div style="text-align: center; margin-top: 20px;">
+                    <p style="color: #7e4b5c; font-size: 1.1rem;">
+                        Message sent <span class="typing-dots">...</span>
+                    </p>
+                    <p style="font-size: 0.9rem; color: #888; margin-top: 10px;">
+                        Our conversation continues
+                    </p>
+                </div>
+            `;
+            button.parentNode.appendChild(typingMessage);
+        }
+    </script>
+</body>
+</html>
